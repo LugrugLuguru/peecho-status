@@ -68,4 +68,19 @@ app.get("/api/status", async (req, res) => {
   }
 
   const url = new URL("https://www.peecho.com/rest/v3/order/details");
-  url.searchParams.set("merc
+  url.searchParams.set("merchantApiKey", process.env.PEECHO_API_KEY);
+
+  if (orderId) {
+    url.searchParams.set("orderId", orderId);
+  } else {
+    url.searchParams.set("orderReference", orderReference);
+  }
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
