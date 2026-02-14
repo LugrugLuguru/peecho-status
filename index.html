@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Peecho Status</title>
+</head>
+<body>
+  <h2>Peecho Bestellstatus</h2>
+
+  <input id="orderId" placeholder="Order ID">
+  <input id="orderRef" placeholder="Order Reference">
+
+  <button onclick="check()">Status abfragen</button>
+
+  <pre id="out"></pre>
+
+  <script>
+    async function check() {
+      const id = orderId.value.trim();
+      const ref = orderRef.value.trim();
+
+      const params = new URLSearchParams();
+      if (id) params.set("orderId", id);
+      else if (ref) params.set("orderReference", ref);
+      else return alert("Daten fehlen");
+
+      const res = await fetch("/api/status?" + params.toString());
+      const data = await res.json();
+      out.textContent = JSON.stringify(data, null, 2);
+    }
+  </script>
+</body>
+</html>
